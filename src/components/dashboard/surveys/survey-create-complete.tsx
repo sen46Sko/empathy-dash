@@ -26,12 +26,12 @@ const SurveyCreateComplete: React.FC<SurveyCreateProps> = ({
     setSendComplete(false);
   };
   
-  // useEffect(() => {
-  //   return () => {
-  //     setSuccess(false);
-  //     setSendComplete(false)
-  //   }
-  // }, [])
+  useEffect(() => {
+    return () => {
+      setSuccess(false);
+      setSendComplete(false)
+    }
+  }, [])
   
   return (
     <Box
