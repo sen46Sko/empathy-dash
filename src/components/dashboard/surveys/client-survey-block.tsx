@@ -6,6 +6,7 @@ import { Box } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
 import SurveyProcess from '@/components/dashboard/surveys/survey-process';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Typography from '@mui/material/Typography';
 
 const ClientSurveyBlock:React.FC = () => {
   const params = useParams();
