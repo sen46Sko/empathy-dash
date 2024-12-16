@@ -20,6 +20,7 @@ export interface ClientContextValue {
   postClient: (values: CreateClientDTO) => void,
   editClient: (id: number, value: CreateClientDTO) => void,
   sortBy: ClientSortByEnum,
+  isMinorLoading: boolean,
   fetchClientById: (id: number) => void,
   initClient: Client | null,
 }
@@ -34,7 +35,8 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
     totalClients: 1,
     sortBy: ClientSortByEnum.CreatedAt,
     rows: 12,
-  })
+  });
+  const [isMinorLoading, setMinorLoading] = useState(false);
   const [initClient, setInitClient] = useState<Client | null>(null);
   const [error, setError] = useState<string | null>(null);
   const isFirstRender = useRef(true);
@@ -118,7 +120,7 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }
   
   useEffect(() => {
-    fetchClients().then(() => null).catch(() => null);
+    fetchClients().then(() => null).catch(() => null)
   }, [currentData.rows, currentData.currentPage, currentData.sortBy]);
   
   const handleDataChange = (key: keyof ClientsState, value: number | string) => {
@@ -149,6 +151,7 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
       handleDataChange,
       postClient,
       editClient,
+      isMinorLoading,
       fetchClientById,
       initClient,
       setData,

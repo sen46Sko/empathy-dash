@@ -75,7 +75,7 @@ const categorySchema = zod.object({
 const SurveyForm: React.FC = () => {
   const params = useParams();
   const id = params?.id;
-  const { postSurvey, categories, postCategory, currentSurvey, editSurvey } = useSurveys();
+  const { postSurvey, categories, postCategory, currentSurvey, editSurvey, isMinorLoading } = useSurveys();
 
   const defaultValues = id ? currentSurvey! : {
     name: '',
@@ -251,7 +251,7 @@ const SurveyForm: React.FC = () => {
                   <Button onClick={() => {setCreateOpen(false)}} color="secondary" variant="outlined">
                     Cancel
                   </Button>
-                  <Button type='submit' color="primary" variant="contained">
+                  <Button disabled={isMinorLoading} type='submit' color="primary" variant="contained">
                     Create
                   </Button>
                 </Box>

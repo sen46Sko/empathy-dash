@@ -13,6 +13,8 @@ import {
 } from '@/types/surveys/survey.types';
 import { surveyClient } from '@/lib/surveys/surveys';
 import { transformSurveyDataToForm } from '@/helpers/survey.helper';
+import { getNotification } from '@/helpers/toast.helper';
+import { NotificationTypeEnum } from '@/types/notification';
 
 export interface SurveysContextValue {
   isLoading: boolean;
@@ -32,17 +34,19 @@ export interface SurveysContextValue {
   postCategory: (value: string) => void,
   fetchSurveyById: (id: number) =>  void,
   currentSurvey: SurveyFormValues | null,
+  isMinorLoading: boolean,
   isSuccess: boolean,
-  sendSurvey: (surveyId: number, clientId: number) => void,
-  setSuccess: Dispatch<SetStateAction<boolean>>,
-  setSendComplete: Dispatch<SetStateAction<boolean>>,
   isSendComplete: boolean,
+  setSendComplete: Dispatch<SetStateAction<boolean>>,
+  sendSurvey: (surveyId: number, clientIds: number[]) => void,
+  setSuccess: Dispatch<SetStateAction<boolean>>
 }
 
 export const SurveysContext = createContext<SurveysContextValue | undefined>(undefined);
 
 export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isLoading, setLoading] = useState<boolean>(false);
+  const [isMinorLoading, setMinorLoading] = useState(false);
   const [currentData, setData] = useState<SurveysState>({
     surveys: [],
     currentPage: 1,
@@ -76,13 +80,20 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setLoading(false);
   }
   
-  const sendSurvey = async (surveyId: number, clientId: number) => {
+  const sendSurvey = async (surveyId: number, clientIds: number[]) => {
     setLoading(true);
-    const { data, error } = await surveyClient.sendSurvey(axiosPrivate, surveyId, clientId);
+    setMinorLoading(true);
+    const { data, error: errorValue } = await surveyClient.sendSurvey(axiosPrivate, surveyId, clientIds);
+    
     if (data) {
       setSendComplete(true);
+      setSuccess(true);
     }
     
+    if (errorValue) {
+      getNotification(errorValue, NotificationTypeEnum.Error)
+    }
+    setMinorLoading(false);
     setLoading(false);
   }
   
@@ -103,22 +114,34 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }
   
   const postCategory = async (value: string) => {
+    setMinorLoading(true);
     const { data: categoryData, error: categoryError } = await surveyClient.postSurveyCategory(axiosPrivate, value);
     
     
     if (categoryData) {
       setCategories((prev) => [...prev, categoryData.data.category]);
     }
+    
+    if (categoryError) {
+      setError(categoryError);
+      getNotification(categoryError, NotificationTypeEnum.Error)
+    }
+    
+    setMinorLoading(false);
   }
   
   const fetchSurveyById = async (id: number) => {
     setLoading(true);
-    const { data, error } = await surveyClient.getSurveyById(axiosPrivate, id);
+    const { data, error: errorData } = await surveyClient.getSurveyById(axiosPrivate, id);
     
     if (data?.data.data[0]) {
       
       const res = transformSurveyDataToForm(data.data.data[0]);
       setCurrentSurvey(res)
+    }
+    
+    if (errorData) {
+      getNotification(errorData, NotificationTypeEnum.Error)
     }
     
     setLoading(false);
@@ -138,6 +161,7 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
     
     if (errorData) {
       setError(errorData);
+      getNotification(errorData, NotificationTypeEnum.Error)
     }
     
     setLoading(false);
@@ -161,39 +185,40 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const postSurvey = async (values: SurveyFormDTO) => {
     setError(null)
     setLoading(true);
+    setMinorLoading(true);
     const { data, error: errorValue } = await surveyClient.postSurvey(axiosPrivate, values);
 
     if (data) {
       setSuccess(true);
     }
-
+    
     if (errorValue) {
-      setError(errorValue)
+      setError(errorValue);
+      getNotification(errorValue, NotificationTypeEnum.Error)
     }
     
     setLoading(false);
+    setMinorLoading(false);
   }
   
   const editSurvey = async (values: SurveyFormDTO, id: number) => {
     setError(null)
     setLoading(true);
+    setMinorLoading(true);
     const { data, error: errorValue } = await surveyClient.editSurvey(axiosPrivate, values, id);
     
     if (data) {
       setSuccess(true);
       
-      // setData((prev) => {
-      //   return {
-      //     ...prev,
-      //     prev[surveys]
-      //   }
-      // })
+      console.log(data);
     }
     
     if (errorValue) {
-      setError(errorValue)
+      setError(errorValue);
+      getNotification(errorValue, NotificationTypeEnum.Error)
     }
     
+    setMinorLoading(false);
     setLoading(false);
   }
   
@@ -205,6 +230,7 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
       fetchSurveys,
       handleDataChange,
       deleteSurvey,
+      isSendComplete,
       ...currentData,
       fetchCategories,
       postCategory,
@@ -215,8 +241,8 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
       isSuccess,
       setSuccess,
       sendSurvey,
-      isSendComplete,
       setSendComplete,
+      isMinorLoading,
     }}>
       {children}
     </SurveysContext.Provider>

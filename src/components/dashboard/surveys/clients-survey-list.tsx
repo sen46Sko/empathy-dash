@@ -57,18 +57,21 @@ const columns = [
 interface ClientsSurveyListProps {
   handleSelect: (_: unknown, row: Client) => void,
   handleDeselect: (_: unknown, row: Client) => void,
-  selected: [number] | [],
+  handleSelectAll: () => void,
+  handleDeselectAll: () => void,
+  selected: number[],
 }
 
-const ClientsSurveyList: React.FC<ClientsSurveyListProps> = ({ handleDeselect, handleSelect, selected }) => {
+const ClientsSurveyList: React.FC<ClientsSurveyListProps> = ({ handleDeselect, handleSelect, selected, handleSelectAll, handleDeselectAll }) => {
   const { clients } = useClients();
   const router = useRouter();
 
   return (
     <DataTable<Client>
       columns={columns}
-      hideSelectAll
       onSelectOne={handleSelect}
+      onSelectAll={handleSelectAll}
+      onDeselectAll={handleDeselectAll}
       onDeselectOne={handleDeselect}
       rows={clients}
       selectable

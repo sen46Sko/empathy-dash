@@ -28,10 +28,10 @@ export class SurveyClient {
     }
   }
   
-  async sendSurvey(axios: AxiosInstance, surveyId: number, clientId: number) {
+  async sendSurvey(axios: AxiosInstance, surveyId: number, clientIds: number[]) {
     try {
       const response = await axios.post<GetSurveysResponse>(SurveyRoutes.SendSurvey, {
-        patient_id: clientId,
+        patient_ids: clientIds,
         survey_id: surveyId,
       });
       
@@ -164,6 +164,22 @@ export class SurveyClient {
       const response = await axios.put(`${SurveyRoutes.EditSurvey}/${id}`, values);
       
       return {data: response}
+    } catch (error: unknown) {
+      if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
+        return { error: ((error as ErrorResponse).response?.data?.message) };
+      }
+      
+      return {
+        error: 'An unknown error occurred'
+      }
+    }
+  }
+  
+  async postClientResponse(result: ClientSurveyResponse) {
+    try {
+      const response = await axiosPublic.post(SurveyRoutes.PostClientResponse, result);
+      
+      return { data: response}
     } catch (error: unknown) {
       if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
         return { error: ((error as ErrorResponse).response?.data?.message) };

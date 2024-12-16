@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import CustomButton from '@/components/core/custom-button';
 import AddIcon from '@mui/icons-material/Add';
@@ -19,6 +19,8 @@ import Select, { type SelectChangeEvent } from '@mui/material/Select';
 import { Option } from '@/components/core/option';
 import { getPageRange } from '@/helpers/core.helper';
 import { Pagination } from '@mui/material';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import Snackbar from '@mui/material/Snackbar';
 
 const SORT_VALUES = [
   {

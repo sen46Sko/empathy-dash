@@ -132,10 +132,22 @@ export function SignInForm(): React.JSX.Element {
           </Stack>
 
           <Box display='flex' justifyContent='center' mt={8}>
+            <Link component={RouterLink} href={paths.auth.custom.resetPassword} variant="body1">
+              Forgot your password?
+            </Link>
+          </Box>
+
+          <Box display='flex' justifyContent='center' mt={8}>
             <CustomButton disabled={isPending} text='Sign In' type="submit"/>
           </Box>
         </form>
       </Stack>
+      <Box alignItems='center' display='flex' justifyContent='center' mt={1}>
+        <Typography variant="body1">Don’t have an account?&nbsp;</Typography>
+        <Link component={RouterLink} href={paths.auth.custom.signUp} sx={{fontWeight: 700}} variant="body1">
+          Sign up
+        </Link>
+      </Box>
     </Box>
   );
 }

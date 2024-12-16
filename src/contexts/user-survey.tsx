@@ -1,5 +1,5 @@
 'use client';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useState } from 'react';
 import { surveyClient } from '@/lib/surveys/surveys';
 import { ClientSurvey, ClientSurveyResponse } from '@/types/surveys/client-survey.types';
 import { RawQuestion } from '@/types/surveys/survey.types';
@@ -51,6 +51,8 @@ export const UserSurveyProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setSurveySendLoading(true);
     const { data, error: errorResult } = await surveyClient.postClientResponse(formattedData);
     
+    console.log(data);
+    
     if (data) {
       setSurveyComplete(true);
     }
@@ -76,4 +78,3 @@ export const UserSurveyProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     </UserSurveyContext.Provider>
   );
 };
-

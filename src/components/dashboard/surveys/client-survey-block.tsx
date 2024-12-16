@@ -4,7 +4,6 @@ import { useUserSurvey } from '@/hooks/use-user-survey';
 import { useParams } from 'next/navigation';
 import { Box } from '@mui/system';
 import CircularProgress from '@mui/material/CircularProgress';
-import Typography from '@mui/material/Typography';
 import SurveyProcess from '@/components/dashboard/surveys/survey-process';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 

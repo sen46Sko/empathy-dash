@@ -49,18 +49,37 @@ const SORT_VALUES = [
 ]
 
 const SendSurveyBlock: React.FC = () => {
-  const { totalClients, currentPage, rows, handleDataChange, isLoading, sortBy } = useClients();
-  const { sendSurvey, isSendComplete } = useSurveys();
-  const [selected, setSelected] = useState<[number] | []>([]);
+  const { totalClients, currentPage, rows, handleDataChange, isLoading, sortBy, clients } = useClients();
+  const { sendSurvey, isSendComplete, isMinorLoading } = useSurveys();
+  const [selected, setSelected] = useState<number[]>([]);
   const searchParams = useSearchParams();
   const surveyId = searchParams.get('surveyId');
   
   const handleSelect = (_: unknown, row: Client) => {
-    setSelected(() => [row.id])
+    setSelected((prev) => {
+      return [...prev, row.id]
+    })
   }
   
   const handleDeselect = (_: unknown, row: Client) => {
-    setSelected(() => [])
+    setSelected((prev) => {
+      return prev.filter((item) => item !== row.id)
+    })
+  }
+  
+  const handleDeselectAll = () => {
+    setSelected([]);
+  }
+  
+  const handleSelectAll = () => {
+    const ids = [...selected];
+    clients.forEach((item) => {
+      if (!ids.includes(item.id)) {
+        ids.push(item.id)
+      }
+    })
+    
+    setSelected(ids);
   }
   
   const handleRowsChange = (event: SelectChangeEvent<number>) => {
@@ -78,9 +97,9 @@ const SendSurveyBlock: React.FC = () => {
   }
   
   const handleSend = () => {
-     if (selected[0]) {
-       sendSurvey(Number(surveyId), selected[0]);
-     }
+    if (selected.length > 0) {
+      sendSurvey(Number(surveyId), selected);
+    }
   };
   
   return (
@@ -92,7 +111,7 @@ const SendSurveyBlock: React.FC = () => {
             description={'The patient will receive a notification by email!'}
           />
         </Box>
-        ) : (
+      ) : (
         <>
           <Card sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
             
@@ -113,7 +132,7 @@ const SendSurveyBlock: React.FC = () => {
               </Box>
               
               <Box display='flex' justifyContent='center'>
-                <CustomButton disabled={selected.length < 1} onClick={handleSend} startIcon={<SendIcon/>} text='Send' type="button"/>
+                <CustomButton disabled={selected.length < 1 || isMinorLoading} onClick={handleSend} startIcon={<SendIcon/>} text='Send' type="button"/>
               </Box>
             </Box>
             
@@ -166,6 +185,8 @@ const SendSurveyBlock: React.FC = () => {
               >
                 {!isLoading && <ClientsSurveyList
                   handleDeselect={handleDeselect}
+                  handleSelectAll={handleSelectAll}
+                  handleDeselectAll={handleDeselectAll}
                   handleSelect={handleSelect}
                   selected={selected}
                 />}

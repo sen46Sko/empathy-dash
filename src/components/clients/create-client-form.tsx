@@ -199,7 +199,7 @@ const CreateClientForm: React.FC = () => {
       
       <Box sx={{ alignSelf: 'center', mt: 10, display: 'flex', gap: 3 }} >
         {isEdit ? (
-          <Button color="secondary" onClick={handleCancel} variant="outlined">
+          <Button disabled={isLoading} color="secondary" onClick={handleCancel} variant="outlined">
             Cancel
           </Button>
         ) : null}

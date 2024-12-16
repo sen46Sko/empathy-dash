@@ -24,3 +24,4 @@ export enum SurveyRoutes {
   EditSurvey = '/survey/edit',
   PostClientResponse = '/survey/results',
 }
+

@@ -15,6 +15,7 @@ import { SettingsButton } from '@/components/core/settings/settings-button';
 import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
 import { Toaster } from '@/components/core/toaster';
 import { ClientsProvider } from '@/contexts/clients';
+import ToastProvider from '@/contexts/toast';
 
 export const viewport = {
   width: 'device-width',
@@ -37,11 +38,13 @@ export default async function Layout({ children }: LayoutProps): Promise<React.J
             <UserProvider>
                 <SettingsProvider settings={settings}>
                   <I18nProvider language="en">
-                    <ThemeProvider>
-                      {children}
-                      <SettingsButton />
-                      <Toaster position="bottom-right" />
-                    </ThemeProvider>
+                    <ToastProvider>
+                      <ThemeProvider>
+                        {children}
+                        <SettingsButton />
+                        <Toaster position="bottom-right" />
+                      </ThemeProvider>
+                    </ToastProvider>
                   </I18nProvider>
                 </SettingsProvider>
             </UserProvider>

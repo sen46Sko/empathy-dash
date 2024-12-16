@@ -6,6 +6,7 @@ import type { SurveyFormValues } from '@/types/surveys/survey.types';
 import { QuestionTypeEnum } from '@/types/surveys/survey.types';
 import Divider from '@mui/material/Divider';
 import { useParams } from 'next/navigation';
+import { useSurveys } from '@/hooks/use-surveys';
 
 interface SurveyPreviewValues {
   values: SurveyFormValues,
@@ -13,6 +14,7 @@ interface SurveyPreviewValues {
 
 const SurveyPreview: React.FC<SurveyPreviewValues> = ({values}) => {
   const params = useParams();
+  const { isMinorLoading } = useSurveys();
   const id = params?.id;
   
   return (
@@ -122,7 +124,7 @@ const SurveyPreview: React.FC<SurveyPreviewValues> = ({values}) => {
           </Box>
         })}
       </Box>
-      <CustomButton sx={{mt: 3}} text={id ? 'Edit Survey' : 'Create Survey'} type="submit"/>
+      <CustomButton disabled={isMinorLoading} sx={{mt: 3}} text={id ? 'Edit Survey' : 'Create Survey'} type="submit"/>
     </Box>
   );
 };
