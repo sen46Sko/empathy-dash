@@ -47,22 +47,6 @@ export class SurveyClient {
     }
   }
   
-  async postClientResponse(result: ClientSurveyResponse) {
-    try {
-      const response = await axiosPublic.post(SurveyRoutes.PostClientResponse, result);
-      
-      return { data: response}
-    } catch (error: unknown) {
-      if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
-        return { error: ((error as ErrorResponse).response?.data?.message) };
-      }
-      
-      return {
-        error: 'An unknown error occurred'
-      }
-    }
-  }
-  
   async getSurveyCategories(axios: AxiosInstance) {
     try {
       const response = await axios.get<GetCategoriesResponse>(SurveyRoutes.GetCategories);
