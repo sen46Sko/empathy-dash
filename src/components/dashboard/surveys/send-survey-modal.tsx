@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, styled } from '@mui/system';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Dialog, FormControl, OutlinedInput, TextField } from '@mui/material';
+import { Dialog, FormControl, TextField } from '@mui/material';
 import { Control, Controller, FieldErrors, useForm } from 'react-hook-form';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -119,6 +119,8 @@ const schema = z
   });
 
 type FormData = z.infer<typeof schema>;
+
+export type FormDataSchedule = FormData;
 
 interface WeekDayProps {
   control: Control<FormData>,

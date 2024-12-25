@@ -1,5 +1,6 @@
 import type { CurrentSurvey, SurveyFormDTO, SurveyFormValues } from '@/types/surveys/survey.types';
 import { QuestionTypeEnum } from '@/types/surveys/survey.types';
+import { FormDataSchedule } from '@/components/dashboard/surveys/send-survey-modal';
 
 export function transformSurveyFormData(data: SurveyFormValues): SurveyFormDTO {
   return {
@@ -95,19 +96,19 @@ const dayMap: Record<string, number> = {
 interface SurveySchedule {
   clients: any[];
   sendMode: 'now' | 'schedule';
-  frequency: 'specificDays' | 'biweekly' | 'monthly';
+  frequency: 'specificDays' | 'monthly';
   selectedDays: string[];
   date: string;
   time: string;
   notify: boolean;
 }
 
-export function convertToCron(data: SurveySchedule): string {
-  const timeDate = new Date(data.time);
+export function convertToCron(data: FormDataSchedule): string {
+  const timeDate = new Date(data.time!);
   const minutes = timeDate.getMinutes();
   const hours = timeDate.getHours();
   
-  const startDate = new Date(data.date);
+  const startDate = new Date(data.date!);
   const startDay = startDate.getDate();
   
   const weekDays = data.selectedDays
@@ -123,18 +124,7 @@ export function convertToCron(data: SurveySchedule): string {
     
     case 'specificDays':
       return `${minutes} ${hours} * * ${weekDays.join(',')}`;
-    
-    case 'biweekly':
-      return weekDays
-        .map(day => {
-          if (isEvenStart) {
-            return `${minutes} ${hours} * * ${day}%2`;
-          } else {
-            return `${minutes} ${hours} * * ${day}%2+1`;
-          }
-        })
-        .join(' || ');
-    
+
     default:
       throw new Error('Invalid frequency');
   }
