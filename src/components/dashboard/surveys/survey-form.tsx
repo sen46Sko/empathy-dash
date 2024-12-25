@@ -280,7 +280,7 @@ const SurveyForm: React.FC = () => {
       </Box>
       
       <form
-        onSubmit={handleSubmit(submit, (e) => console.log(e))}
+        onSubmit={handleSubmit(submit)}
       >
         <Box
           sx={{

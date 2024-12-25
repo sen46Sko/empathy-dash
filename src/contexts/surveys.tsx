@@ -5,7 +5,7 @@ import React, { createContext, useState, useRef, Dispatch, SetStateAction, useEf
 import { useAxiosPrivate } from '@/hooks/use-axios-private';
 import { useRouter } from 'next/navigation';
 import {
-  ClientSurveys,
+  ClientSurveys, GetSurveyDetailsResponse, SendSchedule, SendScheduleDTO,
   SurveyCategory,
   SurveyFormDTO, SurveyFormValues,
   SurveySortByEnum,
@@ -29,6 +29,7 @@ export interface SurveysContextValue {
   editSurvey: (value: SurveyFormDTO, id: number) => void,
   fetchSurveys: () => void,
   fetchCategories: () => void,
+  fetchSurveyDetailsById: (id: number) => void,
   categories: SurveyCategory[],
   deleteSurvey: (id: number) => void,
   postCategory: (value: string) => void,
@@ -38,8 +39,11 @@ export interface SurveysContextValue {
   isSuccess: boolean,
   isSendComplete: boolean,
   setSendComplete: Dispatch<SetStateAction<boolean>>,
-  sendSurvey: (surveyId: number, clientIds: number[]) => void,
-  setSuccess: Dispatch<SetStateAction<boolean>>
+  sendSurvey: (surveyId: number, clientIds: number[], notification: boolean) => void,
+  sendSchedule: (data: SendSchedule) => void,
+  setSuccess: Dispatch<SetStateAction<boolean>>,
+  surveyDetails: GetSurveyDetailsResponse['data'] | null,
+  sendScheduleSurvey: (values: SendScheduleDTO) => void,
 }
 
 export const SurveysContext = createContext<SurveysContextValue | undefined>(undefined);
@@ -56,6 +60,7 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
   })
   const [categories, setCategories] = useState<SurveyCategory[]>([{id: 0, category: 'Other'}]);
   const [currentSurvey, setCurrentSurvey] = useState<SurveyFormValues | null>(null);
+  const [surveyDetails, setSurveyDetails] = useState<GetSurveyDetailsResponse['data'] | null>(null)
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setSuccess] = useState(false);
   const [isSendComplete, setSendComplete] = useState(false);
@@ -80,7 +85,23 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setLoading(false);
   }
   
-  const sendSurvey = async (surveyId: number, clientIds: number[]) => {
+  const fetchSurveyDetailsById = async (id: number) => {
+    setLoading(true);
+    const { data, error: detailsError } = await surveyClient.getSurveyDetails(axiosPrivate, id);
+    
+    if (data) {
+      setSurveyDetails(data.data)
+    }
+    
+    if (detailsError) {
+      setError(detailsError);
+      getNotification(detailsError, NotificationTypeEnum.Error)
+    }
+    
+    setLoading(false);
+  };
+  
+  const sendSurvey = async (surveyId: number, clientIds: number[], notification = false) => {
     setLoading(true);
     setMinorLoading(true);
     const { data, error: errorValue } = await surveyClient.sendSurvey(axiosPrivate, surveyId, clientIds);
@@ -88,6 +109,11 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
     if (data) {
       setSendComplete(true);
       setSuccess(true);
+      
+      if (notification) {
+        getNotification('Survey send successfully!')
+      }
+      
     }
     
     if (errorValue) {
@@ -97,6 +123,20 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setLoading(false);
   }
   
+  const sendScheduleSurvey = async (values: SendScheduleDTO) => {
+    setLoading(true);
+    const { data, error: errorValue } = await surveyClient.sendScheduleSurvey(axiosPrivate, values);
+    
+    if (data) {
+      getNotification('Survey send successfully!')
+    }
+    
+    if (errorValue) {
+      getNotification(errorValue, NotificationTypeEnum.Error)
+    }
+    setMinorLoading(false);
+    setLoading(false);
+  }
   
   useEffect(() => {
     if (isFirstRender.current) {
@@ -209,8 +249,6 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
     
     if (data) {
       setSuccess(true);
-      
-      console.log(data);
     }
     
     if (errorValue) {
@@ -233,7 +271,9 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
       isSendComplete,
       ...currentData,
       fetchCategories,
+      fetchSurveyDetailsById,
       postCategory,
+      surveyDetails,
       fetchSurveyById,
       editSurvey,
       categories,
@@ -243,6 +283,7 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
       sendSurvey,
       setSendComplete,
       isMinorLoading,
+      sendScheduleSurvey,
     }}>
       {children}
     </SurveysContext.Provider>

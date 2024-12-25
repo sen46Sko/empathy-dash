@@ -1,6 +1,3 @@
-import { Client, ClientSortByEnum } from '@/types/clients/clients.types';
-import { ClientQuestion } from '@/types/surveys/client-survey.types';
-
 export interface SurveyOption {
   value: string,
 }
@@ -50,6 +47,13 @@ export interface SurveyCategory {
   category: string,
 }
 
+export interface SendScheduleDTO {
+  patient_ids: number[],
+  survey_id: number,
+  cron_expression: string,
+  next_run: string,
+}
+
 export interface GetCategoriesResponse {
   data: {
     id: number,
@@ -84,7 +88,7 @@ export interface CurrentSurvey {
   name: string;
   category_id: number;
   category_name: string;
-  questions: ClientQuestion[];
+  questions: RawQuestion[];
   created_at: string;
   updated_at: string;
   send_to: number;
@@ -107,4 +111,38 @@ export interface SurveysState {
 export enum SurveySortByEnum {
   Name = 'name',
   Date = 'created_at',
+}
+
+export interface GetSurveyDetailsResponse {
+  data: {
+    name: string,
+    SurveyResult: SurveyResult[];
+  };
+  success: boolean;
+}
+
+export interface SurveyResult {
+  id: number;
+  survey_id: number;
+  patient_id: number;
+  results: SurveyAnswer[];
+  patient: Patient;
+  created_at: string;
+}
+
+interface SurveyAnswer {
+  answer: string;
+  question: RawQuestion;
+}
+
+interface Patient {
+  id: number;
+  full_name: string;
+  email: string;
+  birthday: string;
+  therapy_type: string;
+  notes: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
 }

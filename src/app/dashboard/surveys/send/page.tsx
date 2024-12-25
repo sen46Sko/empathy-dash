@@ -6,7 +6,7 @@ import SendSurveyBlock from '@/components/dashboard/surveys/send-survey-block';
 
 
 
-export const metadata = { title: `Survey | ${config.site.name}` } satisfies Metadata;
+export const metadata = { title: `Overview | Clients | ${config.site.name}` } satisfies Metadata;
 
 export default function Page(): React.JSX.Element {
   return (

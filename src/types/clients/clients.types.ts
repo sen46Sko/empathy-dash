@@ -19,6 +19,12 @@ export interface ClientsState {
   rows: number
 }
 
+export interface ClientsList {
+  id: number,
+  full_name: string,
+  email: string,
+}
+
 export interface GetClientsResponse {
   totalPatients: number;
   totalPages: number;
@@ -26,6 +32,12 @@ export interface GetClientsResponse {
   data: Client[];
   success: boolean;
 }
+
+export interface GetClientsListResponse {
+  data: ClientsList[];
+  success: boolean;
+}
+
 export interface GetClientByIdResponse {
   data: Client,
   success: boolean,

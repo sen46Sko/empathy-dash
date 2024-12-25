@@ -1,80 +1,82 @@
 'use client';
-import React, { useEffect } from 'react';
-import { useUserSurvey } from '@/hooks/use-user-survey';
-import { useParams } from 'next/navigation';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/system';
-import CircularProgress from '@mui/material/CircularProgress';
+import { useUserSurvey } from '@/hooks/use-user-survey';
 import Typography from '@mui/material/Typography';
-import SurveyProcess from '@/components/dashboard/surveys/survey-process';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import type { CustomThemeType } from '@/styles/theme/types';
+import SurveyQuestion from '@/components/dashboard/surveys/survey-question';
+import { useParams } from 'next/navigation';
 
-const ClientSurveyBlock:React.FC = () => {
+const SurveyProcess:React.FC = () => {
+  const { surveyData, postSurveyResponse } = useUserSurvey()
+  const survey = surveyData!;
   const params = useParams();
   const id = params?.id;
-  const { fetchSurvey, surveyData, isLoading } = useUserSurvey();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [answers, setAnswers] = useState<string[]>(Array(survey.questions.length).fill(''))
+  const progress = useMemo(() => {
+    const res = (currentStep / survey?.questions.length) * 100;
+    
+    if (res >= 100) {
+      return 100;
+    }
+    
+    return res;
+  }, [currentStep]);
   
-  useEffect(() => {
-    fetchSurvey(id as string);
-  }, []);
+  const handleNextStep = () => {
+    if (currentStep >= survey.questions.length - 1) {
+      postSurveyResponse(survey.questions, answers, id as string);
+    } else {
+      setCurrentStep((prev) => prev + 1);
+    }
+  }
   
   return (
     <Box>
-      {isLoading ? (
+      
+      <Box
+        sx={{
+          pt: 4,
+          pb: 1,
+        }}
+      >
+        <Typography sx={{ mb: 1, fontSize: '2rem', fw: 500, textAlign: 'center' }}>{`Questionnaire: ${survey.name}`}</Typography>
+      </Box>
+      
+      <Box
+        sx={{
+          height: 10,
+        }}
+      >
         <Box
-          sx={{
-            height: '100vh',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+          sx={(theme) => {
+            return {
+              height: 10,
+              backgroundColor: (theme as CustomThemeType).palette.primary.main,
+              transition: 'all 0.2s',
+              width: `${progress}%`,
+            }
           }}
-        >
-          <CircularProgress size="30px" />
-        </Box>
-      ) : (
-        <>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              height: "100vh",
-              // maxWidth: 'var(--Content-maxWidth)',
-              // width: 'var(--Content-width)',
-            }}
-          >
-            {surveyData ? (
-              <>
-                {surveyData?.SurveyInvite[0]?.status !== 'complete' ? (
-                  <SurveyProcess/>
-                ) : (
-                  <Box sx={{flexGrow: 1, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
-                    <CheckCircleIcon sx={{fontSize: '6rem'}}/>
-                    <Typography
-                      sx={{
-                        fontSize: '2rem',
-                        textAlign: 'center',
-                      }}
-                    >
-                      This survey has already been completed!
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: 'text.secondary',
-                        textAlign: 'center',
-                      }}
-                    >
-                      Thank you for your time and participation.
-                    </Typography>
-                  </Box>
-                )}
-              </>
-            ) : null}
-          </Box>
-        </>
-      )}
-    
+        />
+      </Box>
+      
+      <Box
+        sx={{
+          m: 'var(--Content-margin)',
+          p: 'var(--Content-padding)',
+        }}
+      >
+        {survey.questions[currentStep] ? <SurveyQuestion
+          index={currentStep}
+          question={survey.questions[currentStep]}
+          setAnswers={setAnswers}
+          onNext={handleNextStep}
+          answers={answers}
+        /> : null}
+      </Box>
     </Box>
   );
 };
 
-export default ClientSurveyBlock;
+export default SurveyProcess;

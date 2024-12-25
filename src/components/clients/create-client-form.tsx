@@ -132,6 +132,7 @@ const CreateClientForm: React.FC = () => {
       </Box>
       
       <Box sx={{display: 'flex', gap: 2}}>
+        {/* Birthday */}
         <Controller
           control={control}
           name="birthday"

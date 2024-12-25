@@ -26,11 +26,11 @@ export const UserSurveyProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const fetchSurvey = async (id: string) => {
     setLoading(true);
     const { data, error: errorResult } = await surveyClient.getUserSurveyById(id);
-    
+
     if (data) {
       setSurveyData(data.data);
     }
-    
+
     if (errorResult) {
       setError(errorResult);
     }
@@ -50,8 +50,6 @@ export const UserSurveyProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
     setSurveySendLoading(true);
     const { data, error: errorResult } = await surveyClient.postClientResponse(formattedData);
-    
-    console.log(data);
     
     if (data) {
       setSurveyComplete(true);

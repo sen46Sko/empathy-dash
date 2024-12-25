@@ -1,15 +1,15 @@
-import { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
 import { SurveyRoutes } from '@/api/routes/routes';
 import type { ErrorResponse } from '@/types/core/core.types';
-import {
-  GetCategoriesResponse, GetCurrentSurveyResponse,
+import { SendScheduleDTO, SurveySortByEnum } from '@/types/surveys/survey.types';
+import type {
+  GetCategoriesResponse, GetCurrentSurveyResponse, GetSurveyDetailsResponse,
   GetSurveysResponse,
   PostCategoryResponse,
   SurveyFormDTO
-} from '@/types/surveys/survey.types';
-import { SurveySortByEnum } from '@/types/surveys/survey.types';
+ } from '@/types/surveys/survey.types';
 import { axiosPublic } from '@/api/api';
-import { ClientSurveyResponse, GetClientSurveyResponse } from '@/types/surveys/client-survey.types';
+import type { ClientSurveyResponse, GetClientSurveyResponse } from '@/types/surveys/client-survey.types';
 
 export class SurveyClient {
   
@@ -28,12 +28,43 @@ export class SurveyClient {
     }
   }
   
+  async getSurveyDetails(axios: AxiosInstance, surveyId: number) {
+    try {
+      const response = await axios.get<GetSurveyDetailsResponse>(`${SurveyRoutes.GetSurveysDetails}/${surveyId}`);
+      return { data: response.data}
+    } catch (error: unknown) {
+      if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
+        return { error: ((error as ErrorResponse).response?.data?.message) };
+      }
+      
+      return {
+        error: 'An unknown error occurred'
+      }
+    }
+  }
+  
   async sendSurvey(axios: AxiosInstance, surveyId: number, clientIds: number[]) {
     try {
       const response = await axios.post<GetSurveysResponse>(SurveyRoutes.SendSurvey, {
         patient_ids: clientIds,
         survey_id: surveyId,
       });
+      
+      return { data: response}
+    } catch (error: unknown) {
+      if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
+        return { error: ((error as ErrorResponse).response?.data?.message) };
+      }
+      
+      return {
+        error: 'An unknown error occurred'
+      }
+    }
+  }
+  
+  async sendScheduleSurvey(axios: AxiosInstance, data: SendScheduleDTO) {
+    try {
+      const response = await axios.post<GetSurveysResponse>(SurveyRoutes.SendScheduleSurvey, data);
       
       return { data: response}
     } catch (error: unknown) {

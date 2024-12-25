@@ -9,6 +9,7 @@ export enum AuthRoutes {
 
 export enum ClientRoutes {
   GetPatients = '/patient/get',
+  GetPatientsList = '/patient/get-minor',
   CreatePatient = '/patient/create',
   EditPatient = '/patient/edit'
 }
@@ -16,11 +17,13 @@ export enum ClientRoutes {
 export enum SurveyRoutes {
   PostSurvey = '/survey/create',
   GetSurveys = '/survey/get',
+  GetSurveysDetails = '/survey/details',
   GetSurvey = '/survey',
   DeleteSurvey = '/survey/delete',
   GetCategories = '/survey/category/get',
   PostCategory = '/survey/category/create',
   SendSurvey = '/survey/send',
+  SendScheduleSurvey = '/survey/send-schedule',
   EditSurvey = '/survey/edit',
   PostClientResponse = '/survey/results',
 }

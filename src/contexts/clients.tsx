@@ -1,8 +1,9 @@
 'use client';
 
-import type { Client, ClientsState, CreateClientDTO } from '@/types/clients/clients.types';
+import { Client, ClientsList, ClientsState, CreateClientDTO } from '@/types/clients/clients.types';
 import { ClientSortByEnum } from '@/types/clients/clients.types';
-import React, { createContext, useState, useEffect, useRef, SetStateAction, Dispatch } from 'react';
+import type { SetStateAction, Dispatch } from 'react';
+import React, { createContext, useState, useEffect, useRef } from 'react';
 import { clientClient } from '@/lib/clients/clients';
 import { useAxiosPrivate } from '@/hooks/use-axios-private';
 import { useRouter } from 'next/navigation';
@@ -23,6 +24,8 @@ export interface ClientContextValue {
   isMinorLoading: boolean,
   fetchClientById: (id: number) => void,
   initClient: Client | null,
+  fetchClientsList: () => void,
+  clientsList: ClientsList[],
 }
 
 export const ClientsContext = createContext<ClientContextValue | undefined>(undefined);
@@ -36,6 +39,7 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
     sortBy: ClientSortByEnum.CreatedAt,
     rows: 12,
   });
+  const [clientsList, setClientsList] = useState<ClientsList[]>([]);
   const [isMinorLoading, setMinorLoading] = useState(false);
   const [initClient, setInitClient] = useState<Client | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +50,7 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const fetchClients = async () => {
     setLoading(true);
     const { data, error } = await clientClient.getClients(axiosPrivate, currentData.rows, currentData.currentPage, currentData.sortBy);
+    const { data: clientsListData, error: clientsListError } = await clientClient.getClientsList(axiosPrivate);
     if (data) {
       setData((prev) => {
         return {
@@ -57,7 +62,19 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
       })
     }
     
+    if (clientsListData) {
+      setClientsList(clientsListData.data);
+    }
+    
     setLoading(false);
+  }
+  
+  const fetchClientsList = async () => {
+    const { data: clientsListData, error: clientsListError } = await clientClient.getClientsList(axiosPrivate);
+
+    if (clientsListData) {
+      setClientsList(clientsListData.data);
+    }
   }
   
   const fetchClientById = async (id: number) => {
@@ -153,6 +170,8 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
       editClient,
       isMinorLoading,
       fetchClientById,
+      fetchClientsList,
+      clientsList,
       initClient,
       setData,
     }}>

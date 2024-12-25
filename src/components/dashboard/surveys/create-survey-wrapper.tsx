@@ -24,7 +24,7 @@ const CreateSurveyWrapper: React.FC<CreateSurveyProps> = () => {
   }, [id]);
   
   return (
-    <Box sx={{display: 'flex', flexGrow: 1, flexDirection: 'column', position: 'relative', pt: 3, pb: 2, justifyContent: 'space-between'}}>
+    <Box sx={{display: 'flex', flexGrow: 1, flexDirection: 'column', pt: 3, pb: 2, justifyContent: 'space-between'}}>
       {
         isSuccess ? (
           <SurveyCreateComplete/>

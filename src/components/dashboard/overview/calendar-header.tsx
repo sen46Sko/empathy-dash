@@ -16,7 +16,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({onRight, onLeft, current
     <Box display='flex' alignItems='center' gap={1} justifyContent='center' pt={2} pb={3}>
       <ChevronLeftIcon onClick={onLeft} style={{color: '#667085', cursor: 'pointer'}}/>
         <Box>
-          <Typography>
+          <Typography sx={{fontWeight: 600}}>
             {dayjs(current).format('MMMM YYYY')}
           </Typography>
         </Box>

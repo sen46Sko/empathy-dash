@@ -39,7 +39,6 @@ const SurveysBlock: React.FC = () => {
 
   useEffect(() => {
     fetchCategories();
-    fetchSurveys();
   }, [])
   
   const navigateToCreate = () => {

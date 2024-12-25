@@ -24,7 +24,21 @@ interface SurveyRowProps {
 }
 
 const MuiTableCell = styled(TableCell)`
-  color: ${({theme}) => (theme as CustomThemeType).palette.text.secondary as string} !important;
+  color: ${({theme}) => (theme as CustomThemeType).palette.text.secondary} !important;
+`;
+
+
+const CustomTableRow = styled(TableRow)`
+  // color: ${({ theme }) => (theme as CustomThemeType).palette.text.secondary} !important;
+   cursor: pointer;
+
+   &:hover {
+     background-color: rgba(0, 0, 0, 0.04); /* Эффект наведения */
+   }
+
+  //& > * {
+  //  border-bottom: unset !important; /* Убираем нижнюю границу у ячеек */
+  //}
 `;
 
 const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
@@ -43,6 +57,10 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
   
   const navigateToEdit = () => {
     router.push(`${paths.dashboard.newSurvey}/${row.id}`);
+  }
+  
+  const navigateToDetails = () => {
+    router.push(`${paths.dashboard.surveys}/${row.id}`);
   }
   
   const navigateToSend = () => {
@@ -123,10 +141,10 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
                     mt: 5,
                   }}
                 >
-                  <Button onClick={toggleModal} color="secondary" variant="outlined">
+                  <Button color="secondary" onClick={toggleModal} variant="outlined">
                     Cancel
                   </Button>
-                  <Button onClick={handleDeleteSurvey} color="error" startIcon={<TrashIcon />} variant="contained">
+                  <Button color="error" onClick={handleDeleteSurvey} startIcon={<TrashIcon />} variant="contained">
                     Confirm
                   </Button>
                 </Box>
@@ -136,7 +154,7 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
         ) : null
       }
       
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <CustomTableRow onClick={navigateToDetails}>
         <MuiTableCell component="th" scope="row">
           {row.name}
         </MuiTableCell>
@@ -159,7 +177,10 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
               }}
             >
               <Box
-                onClick={navigateToSend}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigateToSend();
+                }}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -172,7 +193,10 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
                 <Typography sx={{color: 'primary.main', fontSize: '0.8rem'}}>Send</Typography>
               </Box>
               <Box
-                onClick={navigateToEdit}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigateToEdit();
+                }}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -185,7 +209,10 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
                 <Typography sx={{color: 'primary.main',fontSize: '0.8rem'}}>Edit</Typography>
               </Box>
               <Box
-                onClick={toggleModal}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleModal();
+                }}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -198,16 +225,19 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
                 <Typography sx={{color: 'primary.main', fontSize: '0.8rem'}}>Delete</Typography>
               </Box>
             </Box>
-            <IconButton
-              aria-label="expand row"
-              onClick={() => { setOpen(!open); }}
-              size="small"
-            >
-              {open ? <KeyboardArrowUpIcon sx={{color: 'primary.main'}}/> : <KeyboardArrowDownIcon sx={{color: 'primary.main'}}/>}
-            </IconButton>
+            {/*<IconButton*/}
+            {/*  aria-label="expand row"*/}
+            {/*  onClick={(e) => {*/}
+            {/*    e.stopPropagation();*/}
+            {/*    setOpen(!open);*/}
+            {/*  }}*/}
+            {/*  size="small"*/}
+            {/*>*/}
+            {/*  {open ? <KeyboardArrowUpIcon sx={{color: 'primary.main'}}/> : <KeyboardArrowDownIcon sx={{color: 'primary.main'}}/>}*/}
+            {/*</IconButton>*/}
           </Box>
         </MuiTableCell>
-      </TableRow>
+      </CustomTableRow>
       <TableRow>
         <TableCell
           colSpan={6}

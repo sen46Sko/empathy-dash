@@ -1,15 +1,16 @@
-import type { ChangeEvent, Dispatch, SetStateAction} from 'react';
-import React, { SyntheticEvent } from 'react';
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Box } from '@mui/system';
 import type { ClientQuestion } from '@/types/surveys/client-survey.types';
 import Typography from '@mui/material/Typography';
 import CustomButton from '@/components/core/custom-button';
-import SendIcon from '@mui/icons-material/Send';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { TextField } from '@mui/material';
+import { QuestionTypeEnum } from '@/types/surveys/survey.types';
+import { useUserSurvey } from '@/hooks/use-user-survey';
 
 interface SurveyQuestionProps {
   question: ClientQuestion;
@@ -20,6 +21,7 @@ interface SurveyQuestionProps {
 }
 
 const SurveyQuestion: React.FC<SurveyQuestionProps> = ({ question, setAnswers, index, answers, onNext }) => {
+  const { isLoading } = useUserSurvey();
   
   const handleRadioChange = (event:  ChangeEvent<HTMLInputElement>, _: unknown) => {
     setAnswers((prev) => prev.map((item, idx) => {
@@ -59,7 +61,7 @@ const SurveyQuestion: React.FC<SurveyQuestionProps> = ({ question, setAnswers, i
         </Typography>
         
         
-        {question.question_type === 'selection' ? (
+        {question.question_type === QuestionTypeEnum.SELECTION ? (
             <RadioGroup
               defaultValue={answers[index]}
               sx={{
@@ -89,18 +91,18 @@ const SurveyQuestion: React.FC<SurveyQuestionProps> = ({ question, setAnswers, i
                       </Typography>
                     </div>
                   }
-                  value={option}
+                  onChange={handleRadioChange}
                   control={<Radio />}
                   // disabled={option.disabled}
                   // @ts-ignore
-                  onChange={handleRadioChange}
+                  value={option}
                 />
                 )
               })}
             </RadioGroup>
         ) : null}
         
-        {question.question_type === 'yes_no' ? (
+        {question.question_type === QuestionTypeEnum.YESNO ? (
           <RadioGroup
             defaultValue={answers[index]}
             sx={{
@@ -155,7 +157,7 @@ const SurveyQuestion: React.FC<SurveyQuestionProps> = ({ question, setAnswers, i
           </RadioGroup>
         ) : null}
         
-        {question.question_type === 'text_field' ? (
+        {question.question_type === QuestionTypeEnum.TEXT ? (
           <RadioGroup
             defaultValue={answers[index]}
             sx={{
@@ -172,7 +174,7 @@ const SurveyQuestion: React.FC<SurveyQuestionProps> = ({ question, setAnswers, i
             <TextField
               maxRows={4}
               multiline
-              // @ts-ignore
+              // @ts-expect-error
               onChange={handleRadioChange}
               placeholder="Enter your answer..."
               rows={2}
@@ -184,7 +186,7 @@ const SurveyQuestion: React.FC<SurveyQuestionProps> = ({ question, setAnswers, i
       </Box>
       
       <Box display='flex' justifyContent='center' mt={3}>
-        <CustomButton disabled={!answers[index]} endIcon={<ArrowForwardIcon/>} onClick={onNext} text='Next' type="button"/>
+        <CustomButton disabled={!answers[index] || isLoading} endIcon={<ArrowForwardIcon/>} onClick={onNext} text='Next' type="button"/>
       </Box>
     </Box>
   );

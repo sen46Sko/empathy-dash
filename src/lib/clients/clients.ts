@@ -4,7 +4,7 @@ import type { ErrorResponse } from '@/types/core/core.types';
 import {
   ClientSortByEnum,
   CreateClientDTO, EditClientResponse,
-  GetClientByIdResponse,
+  GetClientByIdResponse, GetClientsListResponse,
   GetClientsResponse
 } from '@/types/clients/clients.types';
 
@@ -15,6 +15,22 @@ export class ClientClient {
       const response = await axios.get<GetClientsResponse>(`${ClientRoutes.GetPatients}?rows=${rows}&page=${page}&sortBy=${sortBy}&orderBy=asc&status=active`);
       
       return { data: response}
+    } catch (error: unknown) {
+      if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
+        return { error: ((error as ErrorResponse).response?.data?.message) };
+      }
+      
+      return {
+        error: 'An unknown error occurred'
+      }
+    }
+  }
+  
+  async getClientsList(axios: AxiosInstance) {
+    try {
+      const response = await axios.get<GetClientsListResponse>(ClientRoutes.GetPatientsList);
+      
+      return { data: response.data}
     } catch (error: unknown) {
       if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
         return { error: ((error as ErrorResponse).response?.data?.message) };

@@ -1,17 +1,17 @@
 'use client';
 import React, { useEffect } from 'react';
-import { useUserSurvey } from '@/hooks/use-user-survey';
-import { useParams } from 'next/navigation';
 import { Box } from '@mui/system';
-import CircularProgress from '@mui/material/CircularProgress';
 import SurveyProcess from '@/components/dashboard/surveys/survey-process';
+import { useParams } from 'next/navigation';
+import { useUserSurvey } from '@/hooks/use-user-survey';
+import CircularProgress from '@mui/material/CircularProgress';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Typography from '@mui/material/Typography';
 
 const ClientSurveyBlock:React.FC = () => {
   const params = useParams();
   const id = params?.id;
-  const { fetchSurvey, surveyData, isLoading } = useUserSurvey();
+  const { fetchSurvey, surveyData, isLoading, isSurveyComplete } = useUserSurvey();
   
   useEffect(() => {
     fetchSurvey(id as string);
@@ -44,7 +44,7 @@ const ClientSurveyBlock:React.FC = () => {
           >
             {surveyData ? (
               <>
-                {surveyData?.SurveyInvite[0]?.status !== 'complete' ? (
+                {surveyData?.SurveyInvite[0]?.status !== 'complete' && !isSurveyComplete ? (
                   <SurveyProcess/>
                 ) : (
                   <Box sx={{flexGrow: 1, alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column'}}>
@@ -72,7 +72,7 @@ const ClientSurveyBlock:React.FC = () => {
           </Box>
         </>
       )}
-      
+    
     </Box>
   );
 };
