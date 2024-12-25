@@ -39,7 +39,7 @@ export interface SurveysContextValue {
   isSuccess: boolean,
   isSendComplete: boolean,
   setSendComplete: Dispatch<SetStateAction<boolean>>,
-  sendSurvey: (surveyId: number, clientIds: number[], notification: boolean) => void,
+  sendSurvey: (surveyId: number, clientIds: number[], notification?: boolean) => void,
   sendSchedule: (data: SendSchedule) => void,
   setSuccess: Dispatch<SetStateAction<boolean>>,
   surveyDetails: GetSurveyDetailsResponse['data'] | null,
