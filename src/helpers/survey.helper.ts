@@ -92,7 +92,7 @@ const dayMap: Record<string, number> = {
   'saturday': 6
 };
 
-interface SurveySchedule {
+export interface SurveySchedule {
   clients: any[];
   sendMode: 'now' | 'schedule';
   frequency: 'specificDays' | 'biweekly' | 'monthly';

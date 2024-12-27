@@ -91,10 +91,9 @@ const SurveyQuestion: React.FC<SurveyQuestionProps> = ({ question, setAnswers, i
                       </Typography>
                     </div>
                   }
+                  // @ts-ignore
                   onChange={handleRadioChange}
                   control={<Radio />}
-                  // disabled={option.disabled}
-                  // @ts-ignore
                   value={option}
                 />
                 )

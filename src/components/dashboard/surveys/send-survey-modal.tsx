@@ -24,7 +24,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { convertToCron } from '@/helpers/survey.helper';
+import { SurveySchedule, convertToCron } from '@/helpers/survey.helper';
 import { useSurveys } from '@/hooks/use-surveys';
 import type { SendScheduleDTO } from '@/types/surveys/survey.types';
 import Divider from '@mui/material/Divider';
@@ -238,7 +238,7 @@ const SendSurveyModal: React.FC<SendSurveyModalProps> = ({ sendModeValue, onClos
       
       const dataToSend: SendScheduleDTO = {
         survey_id: Number(id),
-        cron_expression: convertToCron(data),
+        cron_expression: convertToCron(data as unknown as SurveySchedule),
         next_run: combinedDate.toISOString(),
         patient_ids: data.clients.map((item) => item.id)
       };
