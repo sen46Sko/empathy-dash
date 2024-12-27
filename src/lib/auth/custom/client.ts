@@ -1,7 +1,7 @@
 'use client';
 
 import type { User } from '@/types/user';
-import { apiService } from '@/api/api.service';
+import { apiService, notesApiService } from '@/api/api.service';
 import { AuthRoutes } from '@/api/routes/routes';
 import type { AxiosInstance } from 'axios';
 import type { ErrorResponse } from '@/types/core/core.types';
@@ -85,6 +85,21 @@ class AuthClient {
         return { error: ((error as ErrorResponse).response?.data?.message) };
       }
 
+      return {
+        error: 'An unknown error occurred'
+      }
+    }
+  }
+  
+  async notesSignIn(params: SignInWithPasswordParams): Promise<{ data?: SignInResponse; error?: string }> {
+    try {
+      const response: SignInResponse = await notesApiService.post(AuthRoutes.NotesSignIn, params);
+      return { data: response };
+    } catch (error: unknown) {
+      if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
+        return { error: ((error as ErrorResponse).response?.data?.message) };
+      }
+      
       return {
         error: 'An unknown error occurred'
       }

@@ -1,5 +1,6 @@
 export enum AuthRoutes {
   SignIn = '/auth/signIn',
+  NotesSignIn = '/login',
   SignUp = '/auth/signUp',
   ConfirmEmail = '/users/confirm-email',
   ResendConfirmEmail = '/users/resend-confirmation-email',

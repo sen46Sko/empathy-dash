@@ -3,8 +3,9 @@
 import type { ClientsState } from '@/types/clients/clients.types';
 import React, { createContext, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react';
 import { useAxiosPrivate } from '@/hooks/use-axios-private';
+import { useRouter } from 'next/navigation';
 import {
-  ClientSurveys, GetSurveyDetailsResponse, SendScheduleDTO,
+  ClientSurveys, GetSurveyDetailsResponse, SendSchedule, SendScheduleDTO,
   SurveyCategory,
   SurveyFormDTO, SurveyFormValues,
   SurveySortByEnum,
@@ -38,7 +39,8 @@ export interface SurveysContextValue {
   isSuccess: boolean,
   isSendComplete: boolean,
   setSendComplete: Dispatch<SetStateAction<boolean>>,
-  sendSurvey: (surveyId: number, clientIds: number[], notification?: boolean) => void,
+  sendSurvey: (surveyId: number, clientIds: number[], notification: boolean) => void,
+  sendSchedule: (data: SendSchedule) => void,
   setSuccess: Dispatch<SetStateAction<boolean>>,
   surveyDetails: GetSurveyDetailsResponse['data'] | null,
   sendScheduleSurvey: (values: SendScheduleDTO) => void,

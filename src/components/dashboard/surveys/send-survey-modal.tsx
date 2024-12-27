@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Box, styled } from '@mui/system';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Dialog, FormControl, TextField } from '@mui/material';
-import { Control, Controller, FieldErrors, useForm } from 'react-hook-form';
+import { Dialog, FormControl, OutlinedInput, TextField } from '@mui/material';
+import type { Control, FieldErrors} from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -25,7 +26,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { convertToCron } from '@/helpers/survey.helper';
 import { useSurveys } from '@/hooks/use-surveys';
-import { SendScheduleDTO } from '@/types/surveys/survey.types';
+import type { SendScheduleDTO } from '@/types/surveys/survey.types';
+import Divider from '@mui/material/Divider';
 
 interface SendSurveyModalProps {
   sendModeValue: 'now' | 'schedule';
@@ -119,8 +121,6 @@ const schema = z
   });
 
 type FormData = z.infer<typeof schema>;
-
-export type FormDataSchedule = FormData;
 
 interface WeekDayProps {
   control: Control<FormData>,
@@ -242,7 +242,6 @@ const SendSurveyModal: React.FC<SendSurveyModalProps> = ({ sendModeValue, onClos
         next_run: combinedDate.toISOString(),
         patient_ids: data.clients.map((item) => item.id)
       };
-      console.log(dataToSend);
       sendScheduleSurvey(dataToSend);
     }
     
@@ -278,9 +277,10 @@ const SendSurveyModal: React.FC<SendSurveyModalProps> = ({ sendModeValue, onClos
       scroll="body"
     >
       <Box sx={{ p: 1 }}>
-        <Typography sx={{ mb: 3 }} variant="h6">
+        <Typography sx={{ fontWeight: 700, fontSize: '1.5rem' }} variant="h6">
           Schedule Survey For Clients
         </Typography>
+        <Divider sx={{mb: 3, mt: 2}}/>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Controller
             control={control}
@@ -391,15 +391,15 @@ const SendSurveyModal: React.FC<SendSurveyModalProps> = ({ sendModeValue, onClos
                             <DatePicker
                               {...field}
                               onChange={(newValue) => { field.onChange(newValue ? newValue.toDate() : null); }}
-                              value={field.value ? dayjs(field.value) : null}
-                              slots={{
-                                textField: TextField
-                              }}
                               slotProps={{
                                 textField: {
                                   variant: 'filled',
                                 }
                               }}
+                              slots={{
+                                textField: TextField
+                              }}
+                              value={field.value ? dayjs(field.value) : null}
                             />
                             {errors.date ? <FormHelperText>{errors.date.message}</FormHelperText> : null}
                           </FormControl>
@@ -418,15 +418,15 @@ const SendSurveyModal: React.FC<SendSurveyModalProps> = ({ sendModeValue, onClos
                               onChange={(newValue: Dayjs | null) => {
                                 field.onChange(newValue ? newValue.toDate() : null);
                               }}
-                              value={field.value ? dayjs(field.value) : null}
-                              slots={{
-                                textField: TextField
-                              }}
                               slotProps={{
                                 textField: {
                                   variant: 'filled',
                                 }
                               }}
+                              slots={{
+                                textField: TextField
+                              }}
+                              value={field.value ? dayjs(field.value) : null}
                             />
                             {fieldState.error ? <FormHelperText>{fieldState.error.message}</FormHelperText> : null}
                           </FormControl>
@@ -471,19 +471,19 @@ const SendSurveyModal: React.FC<SendSurveyModalProps> = ({ sendModeValue, onClos
                             <InputLabel sx={{mb: 1}}>Start date</InputLabel>
                             <DatePicker
                               {...field}
-                              sx={{
-                                backgroundColor: 'background.paper'
-                              }}
                               onChange={(newValue) => { field.onChange(newValue ? newValue.toDate() : null); }}
-                              value={field.value ? dayjs(field.value) : null}
-                              slots={{
-                                textField: TextField
-                              }}
                               slotProps={{
                                 textField: {
                                   variant: 'filled',
                                 }
                               }}
+                              slots={{
+                                textField: TextField
+                              }}
+                              sx={{
+                                backgroundColor: 'background.paper'
+                              }}
+                              value={field.value ? dayjs(field.value) : null}
                             />
                             {errors.date ? <FormHelperText>{errors.date.message}</FormHelperText> : null}
                           </FormControl>
@@ -502,18 +502,18 @@ const SendSurveyModal: React.FC<SendSurveyModalProps> = ({ sendModeValue, onClos
                               onChange={(newValue: Dayjs | null) => {
                                 field.onChange(newValue ? newValue.toDate() : null);
                               }}
-                              sx={{
-                                backgroundColor: 'background.paper'
-                              }}
-                              value={field.value ? dayjs(field.value) : null}
-                              slots={{
-                                textField: TextField
-                              }}
                               slotProps={{
                                 textField: {
                                   variant: 'filled',
                                 }
                               }}
+                              slots={{
+                                textField: TextField
+                              }}
+                              sx={{
+                                backgroundColor: 'background.paper'
+                              }}
+                              value={field.value ? dayjs(field.value) : null}
                             />
                             {fieldState.error ? <FormHelperText>{fieldState.error.message}</FormHelperText> : null}
                           </FormControl>
