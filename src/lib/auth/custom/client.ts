@@ -5,7 +5,12 @@ import { apiService, notesApiService } from '@/api/api.service';
 import { AuthRoutes } from '@/api/routes/routes';
 import type { AxiosInstance } from 'axios';
 import type { ErrorResponse } from '@/types/core/core.types';
-import type { ConfirmEmailResponse, CreateProfileResponse, SignInResponse } from '@/types/auth/auth.types';
+import {
+  ConfirmEmailResponse,
+  CreateProfileResponse,
+  NoteSignInResponse,
+  SignInResponse
+} from '@/types/auth/auth.types';
 
 const user = {
   id: 'USR-000',
@@ -91,9 +96,25 @@ class AuthClient {
     }
   }
   
-  async notesSignIn(params: SignInWithPasswordParams): Promise<{ data?: SignInResponse; error?: string }> {
+  async notesSignIn(params: SignInWithPasswordParams): Promise<{ data?: NoteSignInResponse; error?: string }> {
     try {
-      const response: SignInResponse = await notesApiService.post(AuthRoutes.NotesSignIn, params);
+      const response: NoteSignInResponse = await notesApiService.post(AuthRoutes.NotesSignIn, params);
+      return { data: response };
+    } catch (error: unknown) {
+      if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
+        return { error: ((error as ErrorResponse).response?.data?.message) };
+      }
+      
+      return {
+        error: 'An unknown error occurred'
+      }
+    }
+  }
+  
+  async deleteNotesAccount(axios: AxiosInstance, password: string): Promise<{ data?: {}; error?: string }> {
+    try {
+      const response: {data: string} = await axios.post(AuthRoutes.DeleteNotesAccount, {password});
+      
       return { data: response };
     } catch (error: unknown) {
       if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {

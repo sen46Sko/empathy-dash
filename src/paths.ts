@@ -12,6 +12,9 @@ export const paths = {
       termsConditions: '/auth/custom/terms-condition',
       createProfile: '/auth/custom/create-profile',
     },
+    notes: {
+      signIn: '/auth/notes',
+    },
     samples: {
       signIn: { centered: '/auth/samples/sign-in/centered', split: '/auth/samples/sign-in/split' },
       signUp: { centered: '/auth/samples/sign-up/centered', split: '/auth/samples/sign-up/split' },
@@ -22,6 +25,9 @@ export const paths = {
       resetPassword: { centered: '/auth/samples/reset-password/centered', split: '/auth/samples/reset-password/split' },
       verifyCode: { centered: '/auth/samples/verify-code/centered', split: '/auth/samples/verify-code/split' },
     },
+  },
+  notes: {
+    main: '/notes',
   },
   survey: {
     main: '/survey',

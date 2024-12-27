@@ -2,12 +2,12 @@
 
 import * as React from 'react';
 
-import type { User } from '@/types/user';
+import type { NoteUser, User } from '@/types/user';
 import { authClient } from '@/lib/auth/custom/client';
 import { logger } from '@/lib/default-logger';
 
 import type { UserContextValue } from '../types';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 export const UserContext = React.createContext<UserContextValue | undefined>(undefined);
 
@@ -21,6 +21,14 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
     token: null,
     error: null,
     isLoading: true,
+  });
+  
+  const [noteInfo, setNoteInfo] = useState<{
+    token: string | null,
+    user: NoteUser | null,
+  }>({
+    token: null,
+    user: null,
   });
 
   const checkSession = React.useCallback(async (): Promise<void> => {
@@ -49,6 +57,15 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
       }
     })
   }, []);
+  
+  const setNotesUser = useCallback((data: NoteUser | null, token: string | null) => {
+    setNoteInfo(() => {
+      return {
+        token: token,
+        user: data,
+      }
+    })
+  }, []);
 
   React.useEffect(() => {
     checkSession().catch((err) => {
@@ -58,7 +75,7 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
     // eslint-disable-next-line react-hooks/exhaustive-deps -- Expected
   }, []);
 
-  return <UserContext.Provider value={{ ...state, checkSession, setUser }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ ...state, checkSession, setUser, noteInfo, setNotesUser }}>{children}</UserContext.Provider>;
 }
 
 export const UserConsumer = UserContext.Consumer;

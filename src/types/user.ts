@@ -5,3 +5,10 @@ export interface User {
   email?: string;
   [key: string]: unknown;
 }
+
+export interface NoteUser {
+  "id": number,
+  "uuid": string,
+  "name": string,
+  "email": string,
+}

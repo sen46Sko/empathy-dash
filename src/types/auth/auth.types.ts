@@ -1,4 +1,4 @@
-import type { User } from '@/types/user';
+import type { NoteUser, User } from '@/types/user';
 
 export enum ResetStageEnum {
   Email = 'Email',
@@ -22,6 +22,11 @@ export interface SignInResponse {
   message: string,
   data: User,
   jwt: string;
+}
+
+export interface NoteSignInResponse {
+  user_details: NoteUser,
+  token: string,
 }
 
 export interface CreateProfileResponse {

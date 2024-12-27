@@ -3,7 +3,6 @@
 import type { ClientsState } from '@/types/clients/clients.types';
 import React, { createContext, useState, useRef, Dispatch, SetStateAction, useEffect } from 'react';
 import { useAxiosPrivate } from '@/hooks/use-axios-private';
-import { useRouter } from 'next/navigation';
 import {
   ClientSurveys, GetSurveyDetailsResponse, SendScheduleDTO,
   SurveyCategory,
@@ -138,11 +137,7 @@ export const SurveysProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }
   
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else {
-      fetchSurveys().then(() => null).catch(() => null)
-    }
+    fetchSurveys().then(() => null).catch(() => null)
   }, [currentData.rows, currentData.currentPage, currentData.sortBy]);
   
   const fetchCategories = async () => {

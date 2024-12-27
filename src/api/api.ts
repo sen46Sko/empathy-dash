@@ -8,7 +8,12 @@ export const axiosPublic = axios.create({
 
 export const axiosNotesPublic = axios.create({
   baseURL: `${NOTES_BASE_URI}/api`,
-  withCredentials: true,
+  // withCredentials: true,
+});
+
+export const axiosNotesPrivate = axios.create({
+  baseURL: `${NOTES_BASE_URI}/api`,
+  // withCredentials: true,
 });
 
 export const axiosPrivate = axios.create({

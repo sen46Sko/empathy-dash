@@ -18,6 +18,7 @@ import { paths } from '@/paths';
 import CustomButton from '@/components/core/custom-button';
 import { useUser } from '@/hooks/use-user';
 import { authClient } from '@/lib/auth/custom/client';
+import { useRouter } from 'next/navigation';
 
 const schema = zod.object({
   email: zod.string().min(1, { message: 'Email is required' }).email(),
@@ -26,12 +27,14 @@ const schema = zod.object({
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { email: 'test@gmail.com', password: 'test' } satisfies Values;
+const defaultValues = { email: 'aleksandrtarasovi44@gmail.com', password: '5645856adF' } satisfies Values;
 
 const NotesSignIn: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>();
   const [isPending, setIsPending] = useState<boolean>(false);
-  const {} = useUser();
+  const { setNotesUser, checkSession } = useUser();
+  const router = useRouter();
+  const {  } = useUser();
   
   const {
     control,
@@ -42,12 +45,21 @@ const NotesSignIn: React.FC = () => {
   
   const onSubmit = React.useCallback(
     async (values: Values): Promise<void> => {
+      setIsPending(true);
       const { data, error } = await authClient.notesSignIn(values);
       
-      console.log(data);
-      console.log(error);
+      if (error) {
+        setError('root', { type: 'server', message: error });
+        setIsPending(false);
+      }
+    
+      else if (data) {
+        setNotesUser(data.user_details, data.token);
+        setIsPending(false);
+        router.refresh();
+      }
     },
-    []
+    [checkSession, router, setError]
   );
   
   return (

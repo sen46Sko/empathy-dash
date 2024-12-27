@@ -6,6 +6,7 @@ export enum AuthRoutes {
   ResendConfirmEmail = '/users/resend-confirmation-email',
   ConfirmTermsConditions = '/users/confirm-terms-conditions',
   CreateProfile = '/users/profile',
+  DeleteNotesAccount = '/delete_account'
 }
 
 export enum ClientRoutes {
