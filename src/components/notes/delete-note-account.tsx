@@ -32,7 +32,7 @@ const schema = zod
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { password: '5645856adF', confirmPassword: '5645856adF' } satisfies Values;
+const defaultValues = { password: '', confirmPassword: '' } satisfies Values;
 
 const DeleteNoteAccount: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>();
