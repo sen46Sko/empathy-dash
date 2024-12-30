@@ -27,7 +27,7 @@ const schema = zod.object({
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { email: 'aleksandrtarasovi44@gmail.com', password: '5645856adF' } satisfies Values;
+const defaultValues = { email: '', password: '' } satisfies Values;
 
 const NotesSignIn: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>();
