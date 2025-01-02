@@ -14,7 +14,7 @@ import { FileX as FileXIcon } from '@phosphor-icons/react/dist/ssr/FileX';
 import { Gear as GearIcon } from '@phosphor-icons/react/dist/ssr/Gear';
 import { GraduationCap as GraduationCapIcon } from '@phosphor-icons/react/dist/ssr/GraduationCap';
 import { House as HouseIcon } from '@phosphor-icons/react/dist/ssr/House';
-import { Kanban as KanbanIcon } from '@phosphor-icons/react/dist/ssr/Kanban';
+import { Kanban as KanbanIcon , Kanban as TasksIcon } from '@phosphor-icons/react/dist/ssr/Kanban';
 import { Link as LinkIcon } from '@phosphor-icons/react/dist/ssr/Link';
 import { Lock as LockIcon } from '@phosphor-icons/react/dist/ssr/Lock';
 import { ReadCvLogo as ReadCvLogoIcon } from '@phosphor-icons/react/dist/ssr/ReadCvLogo';
@@ -35,11 +35,12 @@ import { SquaresFour as OverviewIcon } from '@phosphor-icons/react/dist/ssr/Squa
 import { Bell as NotificationIcon } from '@phosphor-icons/react/dist/ssr/Bell';
 import { UsersThree as ClientsIcon } from '@phosphor-icons/react/dist/ssr/UsersThree';
 import { FileMinus as SurveysIcon } from '@phosphor-icons/react/dist/ssr/FileMinus';
-import { Kanban as TasksIcon } from '@phosphor-icons/react/dist/ssr/Kanban';
+
 import { UserCircle as AccountIcon } from '@phosphor-icons/react/dist/ssr/UserCircle';
 import { LockKey as SecurityIcon } from '@phosphor-icons/react/dist/ssr/LockKey';
 import { Info as InfoIcon } from '@phosphor-icons/react/dist/ssr/Info';
 import { ChartDonut as ReportIcon } from '@phosphor-icons/react/dist/ssr/ChartDonut';
+import { Person as PersonIcon } from '@phosphor-icons/react/dist/ssr/Person';
 
 
 export const icons = {
@@ -61,8 +62,6 @@ export const icons = {
   'sign-out': SignOutIcon,
   'text-align-left': TextAlignLeftIcon,
   'warning-diamond': WarningDiamondIcon,
-  
-  
   'overview': OverviewIcon,
   'clients': ClientsIcon,
   'notifications': NotificationIcon,
@@ -72,6 +71,7 @@ export const icons = {
   'security': SecurityIcon,
   'info': InfoIcon,
   'reports': ReportIcon,
+  'therapists': PersonIcon,
   cube: CubeIcon,
   file: FileIcon,
   house: HouseIcon,

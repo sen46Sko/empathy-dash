@@ -1,5 +1,4 @@
-import { z } from 'zod';
-import dayjs from 'dayjs';
+import { SurveySchedule } from '@/helpers/survey.helper';
 
 export interface Client {
   id: number,
@@ -9,6 +8,8 @@ export interface Client {
   therapy_type: string,
   created_at: string,
   notes: string,
+  SurveyResult: string[],
+  surveys_schedule: SurveySchedule[],
 }
 
 export interface ClientsState {

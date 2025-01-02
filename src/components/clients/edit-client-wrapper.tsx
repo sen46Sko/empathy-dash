@@ -11,8 +11,14 @@ const EditClientWrapper: React.FC = () => {
   const { fetchClientById, initClient } = useClients();
 
   useEffect(() => {
-    getClient();
-  }, [])
+    if (initClient?.id !== Number(id) || !initClient) {
+      getClient();
+    }
+    
+    return () => {
+    
+    }
+  }, []);
   
   const getClient = () => {
     const userId = Number(id as string);

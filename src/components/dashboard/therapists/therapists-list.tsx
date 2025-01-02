@@ -5,10 +5,12 @@ import Typography from '@mui/material/Typography';
 import type { ColumnDef} from '@/components/core/data-table';
 import { DataTable } from '@/components/core/data-table';
 import type { Client } from '@/types/clients/clients.types';
-import { useClients } from '@/hooks/use-clients';
-import dayjs from 'dayjs';
-import { paths } from '@/paths';
 import { useRouter } from 'next/navigation';
+import { useTherapists } from '@/hooks/use-therapists';
+import { Therapist } from '@/types/therapists/therapists.types';
+import moment from 'moment';
+import { Box } from '@mui/system';
+import { paths } from '@/paths';
 
 const columns = [
   {
@@ -18,22 +20,16 @@ const columns = [
       </Typography>
     ),
     name: 'Name',
-    width: '25%',
+    width: '30%',
   },
   {
-    formatter: (row): React.JSX.Element => {
-      const today = dayjs();
-      const birth = dayjs(new Date(row.birthday));
-      const age = today.diff(birth, 'year');
-      const isBirthdayPassedThisYear = today.isAfter(birth.add(age, 'year'));
-      const result = isBirthdayPassedThisYear ? age : age - 1;
-      
-     return ( <Typography color="text.secondary" variant="body2">
-        {result}
-      </Typography> )
-    },
-    name: 'Age',
-    width: '20%',
+    formatter: (row): React.JSX.Element => (
+      <Typography color="text.secondary" variant="body2">
+        {moment(row.created_at).format('DD MMM, YYYY')}
+      </Typography>
+    ),
+    name: 'Created',
+    width: '15%',
   },
   {
     formatter: (row): React.JSX.Element => (
@@ -42,30 +38,42 @@ const columns = [
       </Typography>
     ),
     name: 'Email',
-    width: '30%',
+    width: '35%',
   },
   {
     formatter: (row): React.JSX.Element => (
-      <Typography color="text.secondary" variant="body2">
-        {row.therapy_type}
-      </Typography>
+      <Box
+        sx={{
+          backgroundColor: row.status === 'active' ? 'success.main' : 'warning.main',
+          display: 'inline-flex',
+          alignItems: 'center',
+          padding: '4px 8px',
+          borderRadius: 1,
+        }}
+      >
+        <Typography color="info.contrastText" variant="body2">
+          {row.status}
+        </Typography>
+      </Box>
     ),
-    name: 'Therapy Type',
+    name: 'Status',
+    width: '20%',
+    align: 'center',
   },
-] satisfies ColumnDef<Client>[];
+] satisfies ColumnDef<Therapist>[];
 
-const ClientsList: React.FC = () => {
-  const { clients } = useClients();
+const TherapistsList: React.FC = () => {
+  const { therapists } = useTherapists();
   const [selected, setSelected] = useState<number[]>([]);
   const router = useRouter();
   
-  const handleSelect = (_: unknown, row: Client) => {
+  const handleSelect = (_: unknown, row: Therapist) => {
     setSelected((prev) => {
       return [...prev, row.id]
     })
   }
   
-  const handleDeselct = (_: unknown, row: Client) => {
+  const handleDeselct = (_: unknown, row: Therapist) => {
     setSelected((prev) => {
       return prev.filter((item) => item !== row.id)
     })
@@ -77,7 +85,7 @@ const ClientsList: React.FC = () => {
   
   const handleSelectAll = () => {
     const ids = [...selected];
-    clients.forEach((item) => {
+    therapists.forEach((item) => {
       if (!ids.includes(item.id)) {
         ids.push(item.id)
       }
@@ -86,19 +94,19 @@ const ClientsList: React.FC = () => {
     setSelected(ids);
   }
   
-  const handleClickRow = (_: unknown, row: Client) => {
-    router.push(`${paths.dashboard.clients}/${row.id}`);
+  const handleClickRow = (_: unknown, row: Therapist) => {
+    router.push(`${paths.dashboard.newTherapists}/${row.id}`);
   }
   
   return (
-    <DataTable<Client>
+    <DataTable<Therapist>
       columns={columns}
       onClick={handleClickRow}
       onDeselectAll={handleDeselectAll}
       onDeselectOne={handleDeselct}
       onSelectAll={handleSelectAll}
       onSelectOne={handleSelect}
-      rows={clients}
+      rows={therapists}
       selectable
       selected={selected}
       sx={{
@@ -112,4 +120,4 @@ const ClientsList: React.FC = () => {
   );
 };
 
-export default ClientsList;
+export default TherapistsList;

@@ -14,6 +14,10 @@ import { CalendarIcon } from '@mui/x-date-pickers';
 import SurveyUserResponseLine from '@/components/dashboard/surveys/survey-user-response-line';
 import SendSurveyModal from '@/components/dashboard/surveys/send-survey-modal';
 import { useClients } from '@/hooks/use-clients';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css'
+import Card from '@mui/material/Card';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 const SurveyDetails: React.FC = () => {
   const router = useRouter();
@@ -52,25 +56,12 @@ const SurveyDetails: React.FC = () => {
     <Box>
       {
         isSendOpen ? (
-          <SendSurveyModal sendModeValue={sendMode} onClose={closeModal} id={id as string}/>
+          <SendSurveyModal id={id as string} onClose={closeModal} sendModeValue={sendMode}/>
         ) : null
       }
       
       
-      {isLoading ? (
-        <Box
-          sx={{
-            height: '100vh - 64px',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <CircularProgress size="30px" />
-        </Box>
-      ) : (
-        <>
+      <>
         <Box
           sx={{
             display: 'flex',
@@ -79,37 +70,71 @@ const SurveyDetails: React.FC = () => {
             alignItems: 'center',
           }}
         >
+          <Box
+            sx={{
+              flexBasis: '50%',
+            }}
+          >
             <Box
               sx={{
-                flexBasis: '50%',
+                flexGrow: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
               }}
             >
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <BackButton onClick={handleGoBack}/>
-              </Box>
-              <Typography sx={{ fontSize: 32 }}>{surveyDetails?.name}</Typography>
+              <BackButton onClick={handleGoBack}/>
             </Box>
+            {isLoading ? <Box
+              sx={{
+                display: 'flex',
+              }}
+            >
+              <Box sx={{width: 150, height: 48, paddingTop: 1, paddingBottom: 1}}><Skeleton style={{height: 32}}/></Box>
+            </Box> : <Typography sx={{ fontSize: 32 }}>{surveyDetails?.name}</Typography>}
+          </Box>
           <Box>
             <Box display='flex' gap={2} justifyContent='center'>
-              <CustomButton disabled={false} endIcon={<SendIcon/>} onClick={() => {openModal('now')}} sx={{height: 42}} text='Send' type="button"/>
-              <CustomButton disabled={false} endIcon={<CalendarIcon/>} onClick={() => {openModal('schedule')}} sx={{height: 42}} text='Schedule Survey' type="button" variant='outlined'/>
+              <CustomButton disabled={isLoading} endIcon={<SendIcon/>} onClick={() => {openModal('now')}} sx={{height: 42}} text='Send' type="button"/>
+              <CustomButton disabled={isLoading} endIcon={<CalendarIcon/>} onClick={() => {openModal('schedule')}} sx={{height: 42}} text='Schedule Survey' type="button" variant='outlined'/>
             </Box>
           </Box>
         </Box>
         <Box>
-          {surveyDetails?.SurveyResult.map((item, index) => {
-            return (<SurveyUserResponseLine line={item} key={index}/>)
+          {!isLoading && surveyDetails?.SurveyResult.map((item, index) => {
+            return (<SurveyUserResponseLine key={index} line={item}/>)
           })}
+          
+          {isLoading ? <>
+              {[1,2,3].map((item) => {
+                return (
+                  <Card key={`${item}-index`} sx={{mt: 3, p: 1.4, display: 'flex', justifyContent: 'space-between'}}>
+                    <Box>
+                      <Skeleton style={{fontSize: 12, lineHeight: 1, width: 100, margin: 0}}/>
+                      <Skeleton style={{height: 12, width: 50, margin: 0}}/>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <KeyboardArrowDownRoundedIcon
+                        sx={{
+                          transform: 'rotate(0deg)',
+                          transition: 'transform 0.3s ease',
+                          color: 'text.secondary',
+                        }}
+                      />
+                    </Box>
+                  </Card>
+                )
+              })}
+            </> : null}
         </Box>
-        </>
-      )}
+      </>
     
     </Box>
   );

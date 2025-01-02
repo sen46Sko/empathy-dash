@@ -2,10 +2,11 @@
 
 import type { User } from '@/types/user';
 import { apiService, notesApiService } from '@/api/api.service';
-import { AuthRoutes } from '@/api/routes/routes';
+import { AuthRoutes, TherapistsRoutes } from '@/api/routes/routes';
 import type { AxiosInstance } from 'axios';
 import type { ErrorResponse } from '@/types/core/core.types';
 import {
+  ActivateResponse,
   ConfirmEmailResponse,
   CreateProfileResponse,
   NoteSignInResponse,
@@ -40,6 +41,11 @@ export interface CreateProviderProfileParams {
   "telphone": string,
   "organization": string,
   "role": 'manager' | 'supervisor' | 'clinician' | 'other' | 'none'
+}
+
+export interface ActivateParams {
+  password: string,
+  confirmPassword: string,
 }
 
 export interface ResetPasswordParams {
@@ -90,6 +96,21 @@ class AuthClient {
         return { error: ((error as ErrorResponse).response?.data?.message) };
       }
 
+      return {
+        error: 'An unknown error occurred'
+      }
+    }
+  }
+  
+  async activateAccount(params: ActivateParams, axios: AxiosInstance): Promise<{ data?: ActivateResponse; error?: string }> {
+    try {
+      const response: { data: CreateProfileResponse } = await axios.put(TherapistsRoutes.ActivateTherapist, params);
+      return { data: response.data };
+    } catch (error: unknown) {
+      if (error instanceof Error && (error as ErrorResponse).response?.data?.message) {
+        return { error: ((error as ErrorResponse).response?.data?.message) };
+      }
+      
       return {
         error: 'An unknown error occurred'
       }

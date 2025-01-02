@@ -187,10 +187,14 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
                   justifyContent: 'center',
                   flexDirection: 'column',
                   cursor: 'pointer',
+                  color: 'text.secondary',
+                  '&:hover': {
+                    color: 'primary.main',
+                  }
                 }}
               >
-                <SendIcon sx={{color: 'primary.main', fontSize: '1.5rem', mb: 1}}/>
-                <Typography sx={{color: 'primary.main', fontSize: '0.8rem'}}>Send</Typography>
+                <SendIcon sx={{color: 'inherit', fontSize: '1.5rem', mb: 1}}/>
+                <Typography sx={{color: 'inherit', fontSize: '0.8rem'}}>Send</Typography>
               </Box>
               <Box
                 onClick={(e) => {
@@ -203,10 +207,13 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
                   justifyContent: 'center',
                   flexDirection: 'column',
                   cursor: 'pointer',
+                  '&:hover': {
+                    color: 'primary.main',
+                  }
                 }}
               >
-                <EditIcon sx={{color: 'primary.main', fontSize: '1.5rem', mb: 1}}/>
-                <Typography sx={{color: 'primary.main',fontSize: '0.8rem'}}>Edit</Typography>
+                <EditIcon sx={{color: 'inherit', fontSize: '1.5rem', mb: 1}}/>
+                <Typography sx={{color: 'inherit',fontSize: '0.8rem'}}>Edit</Typography>
               </Box>
               <Box
                 onClick={(e) => {
@@ -219,10 +226,13 @@ const SurveyRow: React.FC<SurveyRowProps> = ({row}) => {
                   justifyContent: 'center',
                   flexDirection: 'column',
                   cursor: 'pointer',
+                  '&:hover': {
+                    color: 'primary.main',
+                  }
                 }}
               >
-                <DeleteIcon sx={{color: 'primary.main', fontSize: '1.5rem', mb: 1}}/>
-                <Typography sx={{color: 'primary.main', fontSize: '0.8rem'}}>Delete</Typography>
+                <DeleteIcon sx={{color: 'inherit', fontSize: '1.5rem', mb: 1}}/>
+                <Typography sx={{color: 'inherit', fontSize: '0.8rem'}}>Delete</Typography>
               </Box>
             </Box>
             {/*<IconButton*/}

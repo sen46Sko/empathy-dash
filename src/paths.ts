@@ -37,6 +37,8 @@ export const paths = {
     notifications: '/dashboard/notifications',
     clients: '/dashboard/clients',
     newClient: '/dashboard/clients/create',
+    therapists: '/dashboard/therapists',
+    newTherapists: '/dashboard/therapists/create',
     surveys: '/dashboard/surveys',
     newSurvey: '/dashboard/surveys/create',
     sendSurvey: '/dashboard/surveys/send',

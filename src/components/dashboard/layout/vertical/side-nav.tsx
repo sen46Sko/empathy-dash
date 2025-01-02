@@ -23,6 +23,8 @@ import { navColorStyles } from './styles';
 import { useUser } from '@/hooks/use-user';
 import Avatar from '@mui/material/Avatar';
 import { Block } from '@mui/icons-material';
+import Button from '@mui/material/Button';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const logoColors = {
   dark: { blend_in: 'light', discrete: 'light', evident: 'light' },
@@ -35,12 +37,16 @@ export interface SideNavProps {
 }
 
 export function SideNav({ color = 'evident', items = [] }: SideNavProps): React.JSX.Element {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const pathname = usePathname();
   
   const {
     settings: { colorScheme = 'light' },
   } = useSettings();
+  
+  const logout = () => {
+    setUser(null, null);
+  }
   
   const { settings } = useSettings();
   const styles = navColorStyles[colorScheme][color];
@@ -94,6 +100,15 @@ export function SideNav({ color = 'evident', items = [] }: SideNavProps): React.
             </Box>
           </Box>
         </Box>
+      </Box>
+      
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Button onClick={logout} startIcon={<LogoutIcon/>} color="error">Logout</Button>
       </Box>
     </Box>
   );

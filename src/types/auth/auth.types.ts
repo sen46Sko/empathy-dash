@@ -34,6 +34,10 @@ export interface CreateProfileResponse {
   data: User
 }
 
+export interface ActivateResponse {
+  message: string,
+}
+
 export interface ConfirmEmailResponse {
   message: string,
   data: User

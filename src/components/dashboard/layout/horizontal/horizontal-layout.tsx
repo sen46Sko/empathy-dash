@@ -8,6 +8,7 @@ import { useSettings } from '@/hooks/use-settings';
 
 import { layoutConfig } from '../config';
 import { MainNav } from './main-nav';
+import Typography from '@mui/material/Typography';
 
 export interface HorizontalLayoutProps {
   children?: React.ReactNode;

@@ -27,7 +27,7 @@ export function GuestGuard({ children }: GuestGuardProps): React.JSX.Element | n
       return;
     }
 
-    if (user) {
+    if (user?.status !== 'pending' && user) {
       logger.debug('[GuestGuard]: User is logged in, confirmed and terms was accepted, redirecting to dashboard');
       router.refresh();
       router.replace(paths.dashboard.overview);

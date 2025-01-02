@@ -9,6 +9,7 @@ import { useSettings } from '@/hooks/use-settings';
 import { layoutConfig } from '../config';
 import { MainNav } from './main-nav';
 import { SideNav } from './side-nav';
+import Typography from '@mui/material/Typography';
 
 export interface VerticalLayoutProps {
   children?: React.ReactNode;

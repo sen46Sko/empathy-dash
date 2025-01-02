@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { OutlinedInput, TextField } from '@mui/material';
+import { OutlinedInput } from '@mui/material';
 import CustomButton from '@/components/core/custom-button';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -17,7 +17,6 @@ import dayjs from 'dayjs';
 import { useClients } from '@/hooks/use-clients';
 import { useParams, useRouter } from 'next/navigation';
 import Button from '@mui/material/Button';
-import { clientClient } from '@/lib/clients/clients';
 import Alert from '@mui/material/Alert';
 
 
@@ -122,7 +121,7 @@ const CreateClientForm: React.FC = () => {
                 sx={{ height: '42px', backgroundColor: 'background.paper' }}
                 {...field}
                 autoComplete="off"
-                placeholder="Type your email"
+                placeholder="Enter client's email"
                 type="email"
               />
               {errors.email ? <FormHelperText>{errors.email.message}</FormHelperText> : null}

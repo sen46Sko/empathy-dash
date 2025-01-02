@@ -7,6 +7,8 @@ import React, { createContext, useState, useEffect, useRef } from 'react';
 import { clientClient } from '@/lib/clients/clients';
 import { useAxiosPrivate } from '@/hooks/use-axios-private';
 import { useRouter } from 'next/navigation';
+import { getNotification } from '@/helpers/toast.helper';
+import { NotificationTypeEnum } from '@/types/notification';
 
 export interface ClientContextValue {
   isLoading: boolean;
@@ -99,6 +101,7 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
     
     if (errorValue) {
       setError(errorValue)
+      getNotification(errorValue, NotificationTypeEnum.Error)
     }
     
     setLoading(false);
@@ -131,6 +134,7 @@ export const ClientsProvider: React.FC<{ children: React.ReactNode }> = ({ child
     
     if (errorValue) {
       setError(errorValue)
+      getNotification(errorValue, NotificationTypeEnum.Error)
     }
     
     setLoading(false);

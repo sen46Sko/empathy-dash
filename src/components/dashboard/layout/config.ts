@@ -17,6 +17,7 @@ export const layoutConfig = {
       title: 'Dashboards',
       items: [
         { key: 'overview', title: 'Overview', href: paths.dashboard.overview, icon: 'overview' },
+        { key: 'therapists', title: 'Therapists', href: paths.dashboard.therapists, icon: 'therapists' },
         { key: 'clients', title: 'Clients', href: paths.dashboard.clients, icon: 'clients' },
         // { key: 'notifications', title: 'Notifications', href: paths.dashboard.notifications, icon: 'notifications' },
         { key: 'surveys', title: 'Surveys', href: paths.dashboard.surveys, icon: 'surveys' },

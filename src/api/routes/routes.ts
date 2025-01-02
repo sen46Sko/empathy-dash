@@ -16,6 +16,13 @@ export enum ClientRoutes {
   EditPatient = '/patient/edit'
 }
 
+export enum TherapistsRoutes {
+  GetTherapists = '/therapist/get',
+  CreateTherapist = '/therapist/create',
+  ActivateTherapist = '/therapist/activate',
+  EditTherapist = '/therapist/edit'
+}
+
 export enum SurveyRoutes {
   PostSurvey = '/survey/create',
   GetSurveys = '/survey/get',

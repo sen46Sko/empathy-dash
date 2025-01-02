@@ -41,6 +41,7 @@ const SurveyTable: React.FC = () => {
             borderColor: 'transparent',
           }}
         >
+    
           {surveys.map((row) => (
             <SurveyRow key={row.name} row={row} />
           ))}
